@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aviator Predictor • BET261</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background: #0b101f;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 1rem;
+        }
+
+        .predictor-card {
+            max-width: 1100px;
+            width: 100%;
+            background: #121b2b;
+            border-radius: 3rem;
+            border: 1px solid #2c405c;
+            box-shadow: 0 25px 50px -8px #00000080, 0 0 0 1px #00aaff30 inset;
+            overflow: hidden;
+        }
+
+        .header {
+            background: #0d1624;
+            padding: 2rem 2.5rem;
+            border-bottom: 1px solid #264a73;
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .logo {
+            background: linear-gradient(145deg, #0066cc, #0099ff);
+            width: 55px;
+            height: 55px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: white;
+        }
+
+        .title h1 {
+            color: white;
+            font-weight: 700;
+            font-size: 2rem;
+        }
+
+        .title span {
+            color: #8ab3ff;
+            font-size: 0.9rem;
+        }
+
+        .joueur-badge {
+            margin-left: auto;
+            background: #1e3148;
+            padding: 0.8rem 2rem;
+            border-radius: 40px;
+            border: 1px solid #3a6e9f;
+            color: #ffdb8e;
+            font-weight: 700;
+            font-size: 1.3rem;
+        }
+
+        .input-section {
+            padding: 2rem 2.5rem;
+            background: #0f1a28;
+            display: flex;
+            gap: 2rem;
+            flex-wrap: wrap;
+            align-items: flex-end;
+            border-bottom: 1px solid #1d3853;
+        }
+
+        .input-group {
+            flex: 1 1 200px;
+        }
+
+        .input-group label {
+            display: block;
+            color: #9bb5da;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+        }
+
+        .input-group input {
+            width: 100%;
+            background: #050a13;
+            border: 2px solid #253e5c;
+            border-radius: 30px;
+            padding: 1rem 1.5rem;
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: white;
+            outline: none;
+        }
+
+        .input-group input:focus {
+            border-color: #0088ff;
+            box-shadow: 0 0 0 3px #0088ff30;
+        }
+
+        .btn-predict {
+            background: linear-gradient(145deg, #0055dd, #0077ff);
+            border: none;
+            border-radius: 40px;
+            padding: 1rem 3rem;
+            font-weight: 700;
+            font-size: 1.2rem;
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            box-shadow: 0 10px 25px #0055dd80;
+        }
+
+        .results {
+            padding: 2rem 2.5rem 2.5rem;
+        }
+
+        .time-info {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            background: #0e1a2a;
+            border-radius: 60px;
+            padding: 1rem 2rem;
+            margin-bottom: 2rem;
+            border: 1px solid #2c5075;
+        }
+
+        .time-item {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .time-value {
+            background: #1f344d;
+            padding: 0.4rem 1.5rem;
+            border-radius: 60px;
+            font-weight: 700;
+            color: #aad0ff;
+            font-size: 1.2rem;
+        }
+
+        .table-container {
+            overflow-x: auto;
+            background: #0d1624;
+            border-radius: 30px;
+            border: 1px solid #2a4a70;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 800px;
+        }
+
+        th {
+            background: #14273f;
+            color: #b6d0f0;
+            font-weight: 600;
+            padding: 1.2rem 1rem;
+            text-align: left;
+            border-bottom: 2px solid #2d5780;
+        }
+
+        td {
+            padding: 1.2rem 1rem;
+            color: #e0ecff;
+            border-bottom: 1px solid #1f3855;
+        }
+
+        .mult {
+            background: linear-gradient(145deg, #1b3757, #102135);
+            padding: 0.4rem 1.2rem;
+            border-radius: 30px;
+            font-weight: 700;
+            color: #ffd966;
+            display: inline-block;
+            border: 1px solid #ffe484;
+        }
+
+        .digit {
+            background: #0b253b;
+            padding: 0.4rem 1rem;
+            border-radius: 40px;
+            font-weight: 700;
+            color: #9ef0c0;
+            border: 1px solid #3ad9a0;
+        }
+
+        .hash {
+            color: #8fa3c2;
+            font-family: monospace;
+            font-size: 0.9rem;
+        }
+
+        .stats {
+            display: flex;
+            justify-content: flex-end;
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .stat-box {
+            background: #102438;
+            padding: 0.7rem 2rem;
+            border-radius: 40px;
+            border: 1px solid #385f8a;
+        }
+
+        .footer-note {
+            text-align: right;
+            color: #4a6582;
+            font-size: 0.8rem;
+            margin-top: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="predictor-card">
+        <div class="header">
+            <div class="logo"><i class="fas fa-chart-simple"></i></div>
+            <div class="title">
+                <h1>AVIATOR PREDICTOR</h1>
+                <span><i class="fas fa-shield"></i> BET261 algorithm • Hash SHA-256</span>
+            </div>
+            <div class="joueur-badge" id="joueurHeader">JOUEUR N°3</div>
+        </div>
+
+        <div class="input-section">
+            <div class="input-group">
+                <label><i class="far fa-clock"></i> Heure départ</label>
+                <input type="text" id="heureInput" value="14:30" placeholder="HH:MM">
+            </div>
+            <div class="input-group">
+                <label><i class="fas fa-user"></i> Joueur N°</label>
+                <input type="number" id="joueurInput" value="3" min="1" max="999">
+            </div>
+            <button class="btn-predict" id="predictBtn"><i class="fas fa-crystal-ball"></i> PRÉDIRE</button>
+        </div>
+
+        <div class="results" id="resultsArea">
+            <!-- injecté par js -->
+        </div>
+    </div>
+
+    <script>
+        (function() {
+            // ================= ALGORITHME PREDICTEUR =================
+            function genererHash(seed, nonce) {
+                // Simulation SHA-256 (déterministe)
+                let input = seed + ':' + nonce;
+                let hash = '';
+                for (let i = 0; i < 64; i++) {
+                    let c = input.charCodeAt(i % input.length) || i * 13;
+                    let val = (c * (nonce + 7) + i * 31) % 16;
+                    hash += val.toString(16);
+                }
+                return hash;
+            }
+
+            function calculerCrash(hash) {
+                // 13 premiers caractères hexa → entier
+                let hex13 = hash.substring(0, 13);
+                let h = parseInt(hex13, 16);
+                let e = Math.pow(2, 52);
+                // Formule Spribe
+                let crash = (100 * e - h) / (e - h);
+                if (crash < 1.01) crash = 1.01;
+                if (crash > 50) crash = 30 + (crash % 10); // Plafonné
+                return Math.round(crash * 100) / 100;
+            }
+
+            function extraireChiffres(mult) {
+                let str = mult.toFixed(5);
+                let dec = str.split('.')[1].padEnd(5, '0');
+                return {
+                    deux: dec.substring(0, 2),
+                    trois: dec.substring(2, 5)  // 3 derniers parmi les 5
+                };
+            }
+
+            function genererPredictions(joueur, heureDepart) {
+                // Valider heure
+                if (!/^\d{2}:\d{2}$/.test(heureDepart)) {
+                    heureDepart = "14:30";
+                }
+                let [h, m] = heureDepart.split(':').map(Number);
+                let debut = new Date();
+                debut.setHours(h, m, 0, 0);
+                
+                let rounds = [];
+                let seed = `bet261_joueur_${joueur}_2026`;
+
+                for (let i = 1; i <= 10; i++) {
+                    let nonce = i;
+                    let hash = genererHash(seed, nonce);
+                    let crash = calculerCrash(hash);
+                    let { deux, trois } = extraireChiffres(crash);
+                    
+                    let heureRound = new Date(debut.getTime() + (i-1) * 6 * 60000);
+                    let heureStr = heureRound.getHours().toString().padStart(2,'0') + ':' + 
+                                   heureRound.getMinutes().toString().padStart(2,'0');
+
+                    rounds.push({
+                        round: i,
+                        heure: heureStr,
+                        multi: crash,
+                        deux: deux,
+                        trois: trois,
+                        hash: hash.substring(0, 10)
+                    });
+                }
+                return rounds;
+            }
+
+            // ========== AFFICHAGE ==========
+            function displayPredictions() {
+                let joueur = parseInt(document.getElementById('joueurInput').value) || 3;
+                let heure = document.getElementById('heureInput').value.trim();
+
+                // Mettre à jour le badge
+                document.getElementById('joueurHeader').innerText = `JOUEUR N°${joueur}`;
+
+                let rounds = genererPredictions(joueur, heure);
+                
+                // Calcul des stats
+                let mults = rounds.map(r => r.multi);
+                let avg = (mults.reduce((a,b) => a+b,0) / 10).toFixed(2);
+                let maxM = Math.max(...mults).toFixed(2);
+                let minM = Math.min(...mults).toFixed(2);
+
+                // Heure finale = 1h après
+                let [hh, mm] = heure.split(':').map(Number);
+                let dateFin = new Date();
+                dateFin.setHours(hh, mm, 0, 0);
+                dateFin.setHours(dateFin.getHours() + 1);
+                let heureFin = dateFin.getHours().toString().padStart(2,'0') + ':' + 
+                               dateFin.getMinutes().toString().padStart(2,'0');
+
+                // Construction HTML
+                let html = `
+                    <div class="time-info">
+                        <div class="time-item"><i class="fas fa-play" style="color:#6aff8e;"></i> <span class="time-value">${heure}</span></div>
+                        <i class="fas fa-long-arrow-alt-right" style="color:#3570a0;"></i>
+                        <div class="time-item"><i class="fas fa-stop" style="color:#ff7b72;"></i> <span class="time-value">${heureFin}</span></div>
+                    </div>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr><th>Round</th><th>Heure</th><th>Multiplicateur</th><th>2 premiers</th><th>3 derniers</th><th>Hash</th></tr>
+                            </thead>
+                            <tbody>
+                `;
+
+                rounds.forEach(r => {
+                    html += `
+                        <tr>
+                            <td><strong style="color:#aac9ff;">#${r.round}</strong></td>
+                            <td>${r.heure}</td>
+                            <td><span class="mult">${r.multi.toFixed(2)}x</span></td>
+                            <td><span class="digit">${r.deux}</span></td>
+                            <td><span class="digit">${r.trois}</span></td>
+                            <td><span class="hash">${r.hash}</span></td>
+                        </tr>
+                    `;
+                });
+
+                html += `
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="stats">
+                        <div class="stat-box"><i class="fas fa-chart-line"></i> Moy. ${avg}x</div>
+                        <div class="stat-box"><i class="fas fa-arrow-up"></i> Haut ${maxM}x</div>
+                        <div class="stat-box"><i class="fas fa-arrow-down"></i> Bas ${minM}x</div>
+                    </div>
+                    <div class="footer-note">
+                        <i class="fas fa-calculator"></i> prédiction basée sur seed BET261 • non réelle
+                    </div>
+                `;
+
+                document.getElementById('resultsArea').innerHTML = html;
+            }
+
+            // Événements
+            document.getElementById('predictBtn').addEventListener('click', displayPredictions);
+            window.addEventListener('load', displayPredictions);
+        })();
+    </script>
+</body>
+</html>
