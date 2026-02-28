@@ -1,411 +1,542 @@
 <!DOCTYPE html>
-<html lang="mg">
+<html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PREDICTOR V2 • Aviator</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hala Madrid · design épuré rouge/orange</title>
+  <!-- Google Fonts (garde Poppins pour le titre, mais sans ombre) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&family=Montserrat:wght@400;500;600&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <!-- Font Awesome 6 (icônes minimales) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    /* ===== RESET ===== */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
-        body {
-            font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
-            background: radial-gradient(circle at 30% 10%, #0e141f, #03050a);
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 1rem;
-        }
+    body {
+      min-height: 100vh;
+      background: radial-gradient(circle at 30% 30%, #0b1a30, #020617); /* fond sombre d'origine */
+      font-family: 'Poppins', 'Montserrat', 'Inter', sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+    }
 
-        .card {
-            max-width: 560px;
-            width: 100%;
-            background: rgba(6, 12, 24, 0.96);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 180, 40, 0.25);
-            border-radius: 2.5rem;
-            padding: 2.2rem 1.8rem;
-            box-shadow: 0 30px 60px -15px #000000cc, 0 0 0 1px rgba(255, 200, 50, 0.2) inset;
-        }
+    /* Carte principale : fond semi-transparent sans glow */
+    .futuristic-card {
+      max-width: 500px;
+      width: 100%;
+      background: rgba(6, 18, 30, 0.8);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid #8B0000; /* bordure rouge foncé */
+      border-radius: 48px;
+      padding: 2.2rem 2rem;
+      box-shadow: none; /* suppression de toute ombre */
+    }
 
-        h1 {
-            font-size: 2rem;
-            font-weight: 800;
-            letter-spacing: 3px;
-            text-align: center;
-            background: linear-gradient(150deg, #ffd966, #ffaa33, #ff8800);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            margin-bottom: 0.15rem;
-            text-transform: uppercase;
-            line-height: 1.2;
-        }
+    /* ===== TITRE PRINCIPAL ===== */
+    .main-header {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.75rem;
+      margin-bottom: 2.2rem;
+    }
 
-        .subtitle {
-            text-align: center;
-            font-size: 0.7rem;
-            letter-spacing: 0.45em;
-            color: #8a9bb5;
-            margin-bottom: 2rem;
-            text-transform: uppercase;
-            font-weight: 500;
-        }
+    .main-header h1 {
+      font-size: 2.4rem;
+      font-weight: 600;
+      letter-spacing: 1px;
+      color: white;
+      margin: 0;
+      line-height: 1.2;
+      /* aucun text-shadow, aucune ombre */
+    }
 
-        .input-group {
-            position: relative;
-            margin-bottom: 2rem;
-        }
+    .glow-icon {
+      font-size: 2.2rem;
+      color: #ffaa33; /* icône orange doux pour rappeler les titres */
+      filter: none; /* suppression des filtres de lueur */
+      animation: none; /* suppression de l'animation */
+    }
 
-        .input-group label {
-            position: absolute;
-            left: 1.2rem;
-            top: -0.7rem;
-            background: #0a1020;
-            padding: 0 0.7rem;
-            font-size: 0.8rem;
-            font-weight: 700;
-            letter-spacing: 1.5px;
-            color: #ffaa33;
-            text-transform: uppercase;
-            border-left: 3px solid #ffaa33;
-            border-right: 3px solid #ffaa33;
-            border-radius: 20px;
-            z-index: 5;
-        }
+    /* ===== LABELS ===== */
+    .section-label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 10px;
+      font-size: 0.8rem;
+      font-weight: 500;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: #bbdbff; /* bleu clair conservé pour les gros labels (HEURE DE DÉPART, etc.) */
+      /* pas de text-shadow */
+    }
 
-        .input-group input {
-            width: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            border: 2px solid rgba(255, 170, 0, 0.4);
-            border-radius: 2rem;
-            padding: 1.2rem 1.8rem;
-            font-size: 1.6rem;
-            font-family: 'Major Mono Display', 'Courier New', monospace;
-            color: #b8f2b0;
-            text-align: center;
-            letter-spacing: 3px;
-            transition: 0.15s;
-            caret-color: #ffaa33;
-        }
+    .section-label i {
+      font-size: 1rem;
+      color: #8B0000; /* icônes en rouge foncé pour rappeler les bordures */
+      filter: none;
+    }
 
-        .input-group input:focus {
-            outline: none;
-            border-color: #ffaa33;
-            box-shadow: 0 0 25px rgba(255, 140, 0, 0.6);
-        }
+    /* ===== CHAMPS DE SAISIE ===== */
+    .input-futuristic {
+      background: rgba(0, 20, 35, 0.8);
+      border: 2px solid #8B0000; /* rouge foncé */
+      border-radius: 20px;
+      color: white; /* texte saisi en blanc */
+      font-family: 'Montserrat', monospace;
+      font-size: 2rem;
+      font-weight: 500;
+      text-align: center;
+      padding: 0.6rem 0.2rem;
+      width: 100%;
+      outline: none;
+      box-shadow: none; /* suppression des ombres */
+    }
 
-        .input-group input::placeholder {
-            color: #3d5068;
-            font-size: 1rem;
-            letter-spacing: 2px;
-        }
+    .input-futuristic:focus {
+      border-color: #b30000; /* légèrement plus clair au focus, mais sans glow */
+      outline: 1px solid #b30000;
+    }
 
-        button#calculerBtn {
-            width: 100%;
-            background: linear-gradient(165deg, #fb8b2c, #d43400);
-            border: none;
-            border-bottom: 6px solid #941f00;
-            color: white;
-            font-size: 1.9rem;
-            font-weight: 800;
-            letter-spacing: 6px;
-            padding: 1.1rem 0;
-            border-radius: 4rem;
-            margin: 1.8rem 0 1.8rem;
-            cursor: pointer;
-            transition: all 0.05s cubic-bezier(0.2, 0.9, 0.3, 1.2);
-            box-shadow: 0 12px 25px -5px #ff5e00b3;
-            text-transform: uppercase;
-            text-shadow: 0 2px 5px rgba(0,0,0,0.5);
-        }
+    .depart-input {
+      font-size: 2.2rem;
+      letter-spacing: 6px;
+      padding: 0.8rem 0.2rem;
+      margin-bottom: 1rem;
+    }
 
-        button#calculerBtn:active {
-            transform: translateY(5px);
-            border-bottom-width: 2px;
-        }
+    /* ===== TROIS BLOCS ===== */
+    .triple-grid {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      margin: 1.8rem 0 2.2rem 0;
+    }
 
-        .result-box {
-            background: rgba(0, 5, 15, 0.7);
-            border: 2px solid #55cc77;
-            border-radius: 2.5rem;
-            padding: 1.2rem 1.8rem;
-            margin: 1.2rem 0 1.8rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 0 28px #31b75e4d;
-        }
+    .time-block {
+      flex: 1;
+      background: rgba(0, 20, 40, 0.6);
+      backdrop-filter: blur(4px);
+      border: 2px solid #8B0000; /* rouge foncé */
+      border-radius: 20px;
+      padding: 1rem 0.5rem;
+      text-align: center;
+      box-shadow: none; /* plus d'ombre */
+    }
 
-        .result-label {
-            color: #c0d2f0;
-            font-size: 1rem;
-            font-weight: 600;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-        }
+    .time-block input {
+      background: transparent;
+      border: none;
+      border-bottom: 2px solid #8B0000; /* rouge foncé */
+      width: 80%;
+      font-size: 2.2rem;
+      font-weight: 500;
+      color: white; /* texte saisi blanc */
+      text-align: center;
+      font-family: 'Inter', monospace;
+      outline: none;
+      padding: 0.2rem 0;
+      box-shadow: none;
+    }
 
-        .result-value {
-            background: #14212e;
-            padding: 0.7rem 2.2rem;
-            border-radius: 4rem;
-            font-size: 2.3rem;
-            font-weight: 800;
-            font-family: 'Major Mono Display', 'Courier New', monospace;
-            color: #b0ffb0;
-            border: 1px solid #6fe081;
-            box-shadow: 0 0 12px #51d46b;
-        }
+    .time-block input:focus {
+      border-bottom-color: #b30000;
+    }
 
-        .tip-button {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.8rem;
-            width: 100%;
-            background: rgba(255, 200, 40, 0.08);
-            border: 2px solid rgba(255, 190, 0, 0.5);
-            border-radius: 3rem;
-            padding: 1rem;
-            color: #ffcd7e;
-            font-size: 1.2rem;
-            font-weight: 600;
-            letter-spacing: 3px;
-            cursor: pointer;
-            transition: 0.18s;
-            margin: 0.8rem 0 1rem;
-            backdrop-filter: blur(4px);
-        }
+    /* Titres des champs en #FFA500 (jaune/orange) */
+    .champ-label {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: #FFA500; /* orange */
+      margin-top: 8px;
+      font-weight: 400;
+      opacity: 1; /* pas de réduction d'opacité */
+    }
 
-        .tip-button:hover {
-            background: rgba(255, 190, 0, 0.2);
-            border-color: #ffbe1a;
-            color: #ffdd99;
-        }
+    .champ-souslabel {
+      font-size: 0.65rem;
+      color: #FFA500; /* orange également */
+      margin-top: -2px;
+      opacity: 0.9;
+      letter-spacing: 1px;
+    }
 
-        .tip-content {
-            background: #0a1424f2;
-            border: 2px solid #f0b34b;
-            border-radius: 2rem;
-            padding: 1.4rem 1.8rem;
-            color: #fad987;
-            font-size: 0.95rem;
-            line-height: 1.7;
-            font-family: 'Space Mono', monospace;
-            white-space: pre-line;
-            margin: 0.5rem 0 1.5rem;
-            box-shadow: inset 0 0 15px #221000;
-        }
+    /* ===== HEURE FINALE (bordures rouge foncé) ===== */
+    .finale-digits {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      background: rgba(0, 10, 20, 0.6);
+      border-radius: 40px;
+      padding: 1rem 1.5rem;
+      border: 2px solid #8B0000;
+      box-shadow: none; /* aucun effet lumineux */
+      backdrop-filter: blur(5px);
+    }
 
-        .history {
-            margin-top: 2rem;
-        }
+    .digit-box {
+      font-size: 2.8rem;
+      font-weight: 500;
+      color: white; /* texte blanc */
+      min-width: 70px;
+      text-align: center;
+      font-family: 'Montserrat', monospace;
+      letter-spacing: 5px;
+      /* pas de text-shadow */
+    }
 
-        .history h3 {
-            color: #ffaa33;
-            font-size: 1.1rem;
-            letter-spacing: 3px;
-            margin-bottom: 0.8rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            border-bottom: 1px dashed #f90b;
-            padding-bottom: 0.4rem;
-        }
+    .separator {
+      font-size: 3rem;
+      color: #8B0000; /* deux-points rouge foncé */
+      line-height: 1;
+      margin: 0 5px;
+      animation: none; /* suppression de l'animation */
+    }
 
-        .history-list {
-            background: rgba(0, 0, 0, 0.4);
-            border-radius: 1.8rem;
-            padding: 0.5rem 0.8rem;
-            max-height: 260px;
-            overflow-y: auto;
-            scrollbar-width: thin;
-            scrollbar-color: #ffaa33 #1a2637;
-        }
+    /* ===== BOUTON CALCULER (police monospace) ===== */
+    .btn-calculer {
+      background: rgba(100, 0, 0, 0.3); /* teinte rouge sombre pour rappeler */
+      border: 2px solid #8B0000;
+      color: white;
+      font-family: 'Courier New', Courier, monospace; /* monospace */
+      font-size: 1.3rem;
+      font-weight: 600;
+      letter-spacing: 3px;
+      padding: 0.9rem 1.8rem;
+      border-radius: 40px;
+      width: 100%;
+      margin: 2rem 0 1.2rem 0;
+      backdrop-filter: blur(6px);
+      cursor: pointer;
+      text-transform: uppercase;
+      box-shadow: none; /* pas d'ombre */
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      transition: background 0.2s;
+    }
 
-        .history-list::-webkit-scrollbar {
-            width: 5px;
-        }
-        .history-list::-webkit-scrollbar-track {
-            background: #1a2637;
-            border-radius: 20px;
-        }
-        .history-list::-webkit-scrollbar-thumb {
-            background: #ffaa33;
-            border-radius: 20px;
-        }
+    .btn-calculer:hover {
+      background: rgba(150, 0, 0, 0.5);
+      border-color: #b30000;
+    }
 
-        .history-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: #111d2bbb;
-            border-radius: 3rem;
-            padding: 0.7rem 1.2rem;
-            margin: 0.6rem 0;
-            border: 1px solid #ffa824;
-            font-family: 'Courier New', monospace;
-            font-size: 0.9rem;
-        }
+    /* ===== HISTORIQUE (bordures rouge, texte vert) ===== */
+    .historique-section {
+      margin-top: 1.8rem;
+    }
 
-        .history-item span:first-child {
-            color: #b2c9f0;
-        }
-        .history-item .hist-hex {
-            color: #faca70;
-            max-width: 80px;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-        .history-item .hist-result {
-            color: #a5f0b0;
-            font-weight: 700;
-            background: #1b2a3c;
-            padding: 0.2rem 0.8rem;
-            border-radius: 2rem;
-        }
+    .historique-list {
+      background: rgba(0, 15, 28, 0.6);
+      backdrop-filter: blur(4px);
+      border: 2px solid #8B0000;
+      border-radius: 28px;
+      padding: 1rem 1rem;
+      min-height: 110px;
+      box-shadow: none;
+      max-height: 180px;
+      overflow-y: auto;
+    }
 
-        .clear-btn {
-            color: #ff6f6f;
-            font-size: 0.8rem;
-            font-weight: 600;
-            cursor: pointer;
-            margin-left: auto;
-            padding: 0.2rem 0.6rem;
-            border-radius: 3rem;
-            background: #2f1b1b;
-            transition: 0.1s;
-        }
-        .clear-btn:hover {
-            background: #4f2b2b;
-            text-decoration: none;
-            color: #ffb0b0;
-        }
+    .empty-histoire {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 80px;
+      color: #8a9fb0; /* gris-bleu discret */
+      font-style: italic;
+      letter-spacing: 1px;
+      gap: 10px;
+    }
 
-        .toast {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background: #1c293d;
-            border-left: 5px solid #ffaa33;
-            padding: 1rem 2rem;
-            border-radius: 1.8rem;
-            color: #f0f0f0;
-            font-weight: 500;
-            box-shadow: 0 15px 30px black;
-            z-index: 9999;
-            animation: slideIn 0.25s ease;
-        }
+    .historique-item {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0.5rem 0.8rem;
+      border-bottom: 1px solid #8B0000;
+      font-family: 'Inter', monospace;
+      font-size: 1.2rem;
+      color: #28A745; /* vert */
+      font-weight: 500;
+    }
 
-        @keyframes slideIn {
-            from { transform: translateX(100%); opacity: 0; }
-            to { transform: translateX(0); opacity: 1; }
-        }
+    .historique-item:last-child {
+      border-bottom: none;
+    }
 
-        .error-toast { border-left-color: #ef4444; }
-        .success-toast { border-left-color: #4CAF50; }
+    .historique-time {
+      background: transparent;
+      border: none;
+      padding: 0.2rem 0.8rem;
+      font-size: 1.2rem;
+      letter-spacing: 2px;
+    }
 
-        @media screen and (min-width: 1024px) {
-            .card {
-                max-width: 900px !important;
-                padding: 3rem !important;
-            }
-            h1 {
-                font-size: 3.5rem !important;
-            }
-            .subtitle {
-                font-size: 1rem !important;
-                margin-bottom: 3rem !important;
-            }
-            .input-group label {
-                font-size: 1.1rem !important;
-                top: -0.9rem !important;
-            }
-            .input-group input {
-                font-size: 2.2rem !important;
-                padding: 1.5rem 2rem !important;
-            }
-            button#calculerBtn {
-                font-size: 2.5rem !important;
-                padding: 1.5rem 0 !important;
-                letter-spacing: 8px !important;
-            }
-            .result-box {
-                padding: 1.5rem 2.5rem !important;
-            }
-            .result-label {
-                font-size: 1.3rem !important;
-            }
-            .result-value {
-                font-size: 3rem !important;
-                padding: 1rem 3rem !important;
-            }
-            .tip-button {
-                font-size: 1.5rem !important;
-                padding: 1.2rem !important;
-            }
-            .history h3 {
-                font-size: 1.4rem !important;
-            }
-            .history-item {
-                font-size: 1.1rem !important;
-                padding: 1rem 1.5rem !important;
-            }
-        }
-    </style>
+    hr {
+      border: 0.5px solid #8B0000;
+      margin: 18px 0 10px 0;
+      width: 60%;
+      margin-left: auto;
+      margin-right: auto;
+      box-shadow: none;
+    }
+
+    /* petits points décoratifs (simples, sans glow) */
+    .deco-dots {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 1rem;
+      gap: 6px;
+    }
+    .deco-dots span {
+      width: 6px;
+      height: 6px;
+      background: #8B0000;
+      border-radius: 50%;
+    }
+
+    /* responsive */
+    @media (max-width: 420px) {
+      .futuristic-card { padding: 1.5rem 1.2rem; }
+      .main-header h1 { font-size: 2rem; }
+      .glow-icon { font-size: 1.8rem; }
+      .depart-input { font-size: 1.8rem; letter-spacing: 3px; }
+      .triple-grid { gap: 0.5rem; }
+      .time-block input { font-size: 1.8rem; }
+      .digit-box { font-size: 2.2rem; min-width: 55px; }
+      .separator { font-size: 2.5rem; }
+    }
+  </style>
 </head>
 <body>
-<div class="card">
-    <h1>PREDICTOR V2</h1>
-    <div class="subtitle">AVIATOR • B-RAPHA</div>
-
-    <div class="input-group">
-        <label>HEURE DE DÉPART</label>
-        <input type="text" id="heureInput" placeholder="16:06:00" value="16:06:00" maxlength="8">
+  <div class="futuristic-card">
+    <!-- en-tête sans aucun effet néon -->
+    <div class="main-header">
+      <span class="glow-icon"><i class="fa-solid fa-star"></i></span>
+      <h1>Hala Madrid</h1>
+      <span class="glow-icon" style="opacity: 0.4;"><i class="fa-regular fa-star"></i></span>
     </div>
 
-    <div class="input-group">
-        <label>HEXADÉCIMAL</label>
-        <input type="text" id="hexInput" placeholder="9a0431e" value="9a0431e">
+    <!-- HEURE DE DÉPART (bordure #8B0000) -->
+    <div class="depart-section">
+      <div class="section-label">
+        <i class="fa-regular fa-clock"></i>
+        <span>HEURE DE DÉPART</span>
+        <i class="fa-regular fa-pen-to-square" style="margin-left: auto; color: #8B0000;"></i>
+      </div>
+      <input type="text" class="input-futuristic depart-input" id="departInput" value="21:47:32" placeholder="HH:MM:SS" maxlength="8">
     </div>
 
-    <button id="calculerBtn">CALCULER</button>
-
-    <div class="result-box">
-        <span class="result-label">PREDICTION</span>
-        <span class="result-value" id="resultat">16:08:30</span>
+    <!-- CHAMPS avec titres orange (#FFA500) -->
+    <div class="triple-grid">
+      <div class="time-block">
+        <input type="text" id="champ1" value="0A" placeholder="ex: 0A">
+        <div class="champ-label">CHAMP 1 <span class="champ-souslabel">(Hex)</span></div>
+      </div>
+      <div class="time-block">
+        <input type="text" id="champ2" value="10" placeholder="ex: 10">
+        <div class="champ-label">CHAMP 2 <span class="champ-souslabel">(Décimal)</span></div>
+      </div>
+      <div class="time-block">
+        <input type="text" id="champ3" value="08" placeholder="secondes">
+        <div class="champ-label">CHAMP 3 <span class="champ-souslabel"></span></div>
+      </div>
     </div>
 
-    <div class="tip-button" id="tipBtn">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/>
-            <path d="M9 18h6"/>
-            <path d="M10 22h4"/>
-        </svg>
-        ASTUCE
-    </div>
-    <div id="tipContent" class="tip-content" style="display: none;">
-        Rehefa rose roa misesy dia tsy miditra fa makà hafa, indraindray manko rafale ka hiteny hifanome tsiny,tsy 100% izany ito fa anjaranao mandinika, yazz
+    <!-- HEURE FINALE (bordure rouge) -->
+    <div class="finale-container">
+      <div class="section-label">
+        <i class="fa-regular fa-sun"></i>
+        <span>HEURE FINALE</span>
+        <i class="fa-regular fa-sparkles" style="margin-left: auto; color:#8B0000;"></i>
+      </div>
+      <div class="finale-digits" id="finaleDisplay">
+        <span class="digit-box" id="finalH">21</span>
+        <span class="separator">:</span>
+        <span class="digit-box" id="finalM">47</span>
+        <span class="separator">:</span>
+        <span class="digit-box" id="finalS">32</span>
+      </div>
+      <hr>
     </div>
 
-    <div class="history">
-        <h3>
-            <span>📋</span> HISTORIQUE
-            <span class="clear-btn" id="clearBtn">Effacer</span>
-        </h3>
-        <div class="history-list" id="historyList"></div>
+    <!-- BOUTON CALCULER en monospace -->
+    <button class="btn-calculer" id="calculBtn">
+      <i class="fa-regular fa-calculator"></i> CALCULER
+      <i class="fa-regular fa-arrow-right"></i>
+    </button>
+
+    <!-- HISTORIQUE -->
+    <div class="historique-section">
+      <div class="section-label">
+        <i class="fa-regular fa-clock"></i>
+        <span>HISTORIQUE</span>
+        <i class="fa-regular fa-bookmark" style="margin-left: auto; color:#8B0000;"></i>
+      </div>
+      <div class="historique-list" id="historiqueContainer">
+        <div class="empty-histoire" id="emptyHistoryMsg">
+          <i class="fa-regular fa-minus"></i> Aucun calcul
+        </div>
+      </div>
     </div>
-</div>
 
-<div id="toastContainer"></div>
+    <!-- points décoratifs rouge sombre -->
+    <div class="deco-dots">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+  </div>
 
-<script>
-// ==================== CODE OBFUSCATED (CALCUL + PROTECTION + HISTORIQUE) ====================
-function _0xd4d0(_0x45ecb1,_0xbef791){_0x45ecb1=_0x45ecb1-0x81;const _0x5b28df=_0x5b28();let _0xd4d0d5=_0x5b28df[_0x45ecb1];return _0xd4d0d5;}const _0x4119ef=_0xd4d0;(function(_0x93139d,_0x126055){const _0x12abaf=_0xd4d0,_0x5a523e=_0x93139d();while(!![]){try{const _0x1eaa5d=-parseInt(_0x12abaf(0xae))/0x1*(parseInt(_0x12abaf(0xda))/0x2)+parseInt(_0x12abaf(0x96))/0x3+-parseInt(_0x12abaf(0xd6))/0x4*(-parseInt(_0x12abaf(0xc9))/0x5)+parseInt(_0x12abaf(0xc0))/0x6*(-parseInt(_0x12abaf(0x85))/0x7)+parseInt(_0x12abaf(0xa2))/0x8*(parseInt(_0x12abaf(0xb7))/0x9)+-parseInt(_0x12abaf(0xcf))/0xa*(-parseInt(_0x12abaf(0xd7))/0xb)+-parseInt(_0x12abaf(0x90))/0xc*(parseInt(_0x12abaf(0x9d))/0xd);if(_0x1eaa5d===_0x126055)break;else _0x5a523e['push'](_0x5a523e['shift']());}catch(_0x46b5da){_0x5a523e['push'](_0x5a523e['shift']());}}}(_0x5b28,0xf2d4d),(function(){const _0x1e332e=_0xd4d0;document[_0x1e332e(0xd2)]('contextmenu',_0x281abf=>{return _0x281abf['preventDefault'](),![];}),document[_0x1e332e(0xd2)](_0x1e332e(0xaf),_0x4d8f9d=>{const _0x3708a6=_0x1e332e;if(_0x4d8f9d[_0x3708a6(0x8e)]===_0x3708a6(0xd0)||_0x4d8f9d[_0x3708a6(0xb4)]===0x7b)return _0x4d8f9d[_0x3708a6(0xc3)](),alert(_0x3708a6(0xa6)),![];if(_0x4d8f9d[_0x3708a6(0xb8)]&&_0x4d8f9d[_0x3708a6(0x84)]&&_0x4d8f9d[_0x3708a6(0x8e)]==='I')return _0x4d8f9d[_0x3708a6(0xc3)](),alert(_0x3708a6(0xcd)),![];if(_0x4d8f9d[_0x3708a6(0xb8)]&&_0x4d8f9d[_0x3708a6(0x8e)]==='u')return _0x4d8f9d[_0x3708a6(0xc3)](),alert(_0x3708a6(0xc6)),![];if(_0x4d8f9d[_0x3708a6(0xb8)]&&_0x4d8f9d[_0x3708a6(0x84)]&&_0x4d8f9d['key']==='J')return _0x4d8f9d[_0x3708a6(0xc3)](),alert(_0x3708a6(0xa4)),![];}),window[_0x1e332e(0x89)][_0x1e332e(0x8a)]==='view-source:'&&(window['location'][_0x1e332e(0xb9)]=_0x1e332e(0xb0)),console['log'](_0x1e332e(0xc2));}()));function analyserHeure(_0x14ce23){const _0x37bf97=_0xd4d0,_0x302101=_0x14ce23[_0x37bf97(0xd3)](/^(\d{1,2}):(\d{2}):(\d{2})$/);if(!_0x302101)return null;const _0x19aed2=parseInt(_0x302101[0x1],0xa),_0x3a7f9c=parseInt(_0x302101[0x2],0xa),_0x38d8fc=parseInt(_0x302101[0x3],0xa);if(_0x19aed2>0x17||_0x3a7f9c>0x3b||_0x38d8fc>0x3b)return null;return{'heures':_0x19aed2,'minutes':_0x3a7f9c,'secondes':_0x38d8fc};}function extraireChiffres(_0x29a226){const _0x42324e=_0xd4d0;return _0x29a226[_0x42324e(0x9e)](/\D/g,'')[_0x42324e(0xbf)]('')[_0x42324e(0x9f)](Number);}function formaterHeure(_0x4a849e,_0x37346f,_0x29374b){const _0x415d16=_0xd4d0;return String(_0x4a849e)[_0x415d16(0x82)](0x2,'0')+':'+String(_0x37346f)[_0x415d16(0x82)](0x2,'0')+':'+String(_0x29374b)[_0x415d16(0x82)](0x2,'0');}function calculerPrediction(_0x265301,_0x859827){const _0x4663ad=_0xd4d0,_0x1e41e0=analyserHeure(_0x265301);if(!_0x1e41e0)return null;const _0x59db64=extraireChiffres(_0x859827);if(_0x59db64[_0x4663ad(0x87)]<0x2)return null;const _0x3f9fcd=[..._0x59db64][_0x4663ad(0xce)]((_0xf1c358,_0xfd0f)=>_0xf1c358-_0xfd0f),_0x32132d=_0x3f9fcd[0x0]+_0x3f9fcd[0x1],_0x148f73=_0x59db64[0x0]*0xa+_0x59db64[0x1],_0x4b68b2=Math[_0x4663ad(0x93)](_0x148f73/0x3c),_0x3e80ea=_0x148f73===0x3c?0x0:_0x148f73%0x3c,_0x5b899f=_0x32132d+_0x4b68b2;let _0x3e6c00=_0x1e41e0[_0x4663ad(0xba)]*0xe10+_0x1e41e0[_0x4663ad(0xad)]*0x3c+_0x1e41e0[_0x4663ad(0xd5)];_0x3e6c00+=_0x5b899f*0x3c+_0x3e80ea,_0x3e6c00=_0x3e6c00%(0x18*0xe10);const _0xa11550=Math[_0x4663ad(0x93)](_0x3e6c00/0xe10),_0x1bab36=Math[_0x4663ad(0x93)](_0x3e6c00%0xe10/0x3c),_0x249fa7=_0x3e6c00%0x3c;return formaterHeure(_0xa11550,_0x1bab36,_0x249fa7);}function afficherToast(_0x32f372,_0x19273e=_0x4119ef(0x83)){const _0x54f8f3=_0x4119ef,_0x54efc5=document['createElement']('div');_0x54efc5[_0x54f8f3(0xb3)]=_0x54f8f3(0xd8)+(_0x19273e===_0x54f8f3(0xab)?_0x54f8f3(0xc7):_0x19273e===_0x54f8f3(0xc1)?_0x54f8f3(0x95):''),_0x54efc5[_0x54f8f3(0xd1)]=_0x32f372,document['getElementById'](_0x54f8f3(0xc5))[_0x54f8f3(0x86)](_0x54efc5),setTimeout(()=>_0x54efc5[_0x54f8f3(0x9b)](),0xaf0);}let historique=[];function ajouterHistorique(_0x321265,_0x4cd73b,_0x12954d){const _0x39f01d=_0x4119ef,_0x4cf62e=Date[_0x39f01d(0x91)]()+Math['random']()[_0x39f01d(0xbe)](0x24)[_0x39f01d(0xa1)](0x2,0x8);historique['unshift']({'id':_0x4cf62e,'heureDepart':_0x321265,'hex':_0x4cd73b,'resultat':_0x12954d});if(historique[_0x39f01d(0x87)]>0xa)historique=historique[_0x39f01d(0x92)](0x0,0xa);mettreAJourHistorique();}function supprimerHistorique(_0xa2f7d2){const _0x1504c8=_0x4119ef;historique=historique[_0x1504c8(0xa7)](_0x2e1f6a=>_0x2e1f6a['id']!==_0xa2f7d2),mettreAJourHistorique();}function effacerToutHistorique(){historique=[],mettreAJourHistorique();}function _0x5b28(){const _0x360dfb=['DOMContentLoaded','✅\x20Prédiction\x20calculée','225kdncmW','ctrlKey','href','heures','</span>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<span\x20class=\x22hist-hex\x22>','click','innerHTML','toString','split','177078VgBeef','succès','✅\x20Protection\x20activée','preventDefault','none','toastContainer','⛔\x20View\x20Source\x20désactivé','error-toast','14:22:10','118855LBtbTS','getElementById','heureInput','supprimerHistorique','⛔\x20Inspecteur\x20désactivé','sort','10uSbYRd','F12','textContent','addEventListener','match','trim','secondes','124BTvfCo','2263679ElhWjd','toast\x20','tipBtn','326jeVejD','hexInput','display','historyList','padStart','info','shiftKey','413isUSlo','appendChild','length','16:08:30','location','protocol','join','❌\x20L\x27hexadécimal\x20doit\x20contenir\x20au\x20moins\x202\x20chiffres','resultat','key','14:26:44','84yNUAfl','now','slice','floor','clearBtn','success-toast','740136rfpJYv','16:06:00','❌\x20Format\x20d\x27heure\x20invalide\x20(HH:MM:SS)','<div\x20style=\x22color:#5f738c;\x20text-align:center;\x20padding:1rem;\x22>—\x20Aucun\x20historique\x20—</div>','calculerBtn','remove','value','596362QdRRlu','replace','map','f8a32c1','substring','607288nmdRNP','9a0431e','⛔\x20Console\x20désactivée','\x0a\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22history-item\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<span>','⛔\x20Fonction\x20désactivée','filter','</span>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<span\x20class=\x22clear-btn\x22\x20style=\x22margin-left:0.5rem;\x22\x20onclick=\x22supprimerHistorique(\x27','heureDepart','tipContent','erreur','hex','minutes','185ynxhuO','keydown','about:blank','\x27)\x22>✕</span>\x0a\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x20\x20\x20\x20','style','className','keyCode'];_0x5b28=function(){return _0x360dfb;};return _0x5b28();}function mettreAJourHistorique(){const _0xa2c4db=_0x4119ef,_0x2cf3ff=document['getElementById'](_0xa2c4db(0x81));if(historique['length']===0x0){_0x2cf3ff[_0xa2c4db(0xbd)]=_0xa2c4db(0x99);return;}_0x2cf3ff[_0xa2c4db(0xbd)]=historique['map'](_0x84cb4e=>_0xa2c4db(0xa5)+_0x84cb4e[_0xa2c4db(0xa9)]+_0xa2c4db(0xbb)+_0x84cb4e['hex']['substring'](0x0,0x6)+(_0x84cb4e[_0xa2c4db(0xac)][_0xa2c4db(0x87)]>0x6?'…':'')+'</span>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<span>➔</span>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<span\x20class=\x22hist-result\x22>'+_0x84cb4e[_0xa2c4db(0x8d)]+_0xa2c4db(0xa8)+_0x84cb4e['id']+_0xa2c4db(0xb1))[_0xa2c4db(0x8b)]('');}window[_0x4119ef(0xcc)]=supprimerHistorique,document['addEventListener'](_0x4119ef(0xb5),function(){const _0x37ffac=_0x4119ef;document[_0x37ffac(0xca)](_0x37ffac(0x9a))['addEventListener'](_0x37ffac(0xbc),()=>{const _0x4b729f=_0x37ffac,_0x1e7b45=document['getElementById'](_0x4b729f(0xcb))[_0x4b729f(0x9c)]['trim'](),_0x982092=document[_0x4b729f(0xca)](_0x4b729f(0xdb))['value'][_0x4b729f(0xd4)]();if(!_0x1e7b45){afficherToast('❌\x20Heure\x20de\x20départ\x20requise',_0x4b729f(0xab));return;}if(!_0x982092||_0x982092[_0x4b729f(0x9e)](/\D/g,'')['length']<0x2){afficherToast(_0x4b729f(0x8c),_0x4b729f(0xab));return;}const _0x526188=calculerPrediction(_0x1e7b45,_0x982092);if(!_0x526188){afficherToast(_0x4b729f(0x98),_0x4b729f(0xab));return;}document['getElementById'](_0x4b729f(0x8d))[_0x4b729f(0xd1)]=_0x526188,ajouterHistorique(_0x1e7b45,_0x982092,_0x526188),afficherToast(_0x4b729f(0xb6),'succès');}),document[_0x37ffac(0xca)](_0x37ffac(0xd9))[_0x37ffac(0xd2)](_0x37ffac(0xbc),()=>{const _0x5e1314=_0x37ffac,_0x13a43a=document[_0x5e1314(0xca)](_0x5e1314(0xaa));_0x13a43a[_0x5e1314(0xb2)][_0x5e1314(0xdc)]=_0x13a43a[_0x5e1314(0xb2)]['display']===_0x5e1314(0xc4)?'block':_0x5e1314(0xc4);}),document[_0x37ffac(0xca)](_0x37ffac(0x94))[_0x37ffac(0xd2)](_0x37ffac(0xbc),()=>{const _0x488c34=_0x37ffac;effacerToutHistorique(),afficherToast('🗑️\x20Historique\x20effacé',_0x488c34(0x83));});const _0x310c79=calculerPrediction(_0x37ffac(0x97),_0x37ffac(0xa3));_0x310c79?document[_0x37ffac(0xca)]('resultat')['textContent']=_0x310c79:document[_0x37ffac(0xca)]('resultat')[_0x37ffac(0xd1)]='16:08:30',ajouterHistorique('16:06:00',_0x37ffac(0xa3),_0x310c79||_0x37ffac(0x88)),setTimeout(()=>{const _0x392ba3=_0x37ffac;ajouterHistorique(_0x392ba3(0xc8),_0x392ba3(0xa0),_0x392ba3(0x8f));},0x50);});
-</script>
+  <script>
+    (function() {
+      // DOM elements
+      const departInput = document.getElementById('departInput');
+      const champ1 = document.getElementById('champ1');
+      const champ2 = document.getElementById('champ2');
+      const champ3 = document.getElementById('champ3');
+      const finalH = document.getElementById('finalH');
+      const finalM = document.getElementById('finalM');
+      const finalS = document.getElementById('finalS');
+      const calculBtn = document.getElementById('calculBtn');
+      const historiqueContainer = document.getElementById('historiqueContainer');
+      const emptyMsg = document.getElementById('emptyHistoryMsg');
+
+      // Conversion hexa -> décimal
+      function hexToDecimal(hexStr) {
+        let clean = hexStr.trim().replace(/^0x/i, '');
+        if (!/^[0-9A-Fa-f]+$/.test(clean)) return NaN;
+        return parseInt(clean, 16);
+      }
+
+      // Extraction nombre décimal (champ2 et champ3)
+      function decimalFromInput(str) {
+        let clean = str.trim().replace(/[^\d-]/g, '');
+        if (clean === '' || clean === '-') return NaN;
+        let num = Number(clean);
+        return isNaN(num) ? NaN : num;
+      }
+
+      // Format 2 digits (avec gestion du signe)
+      function fmt2(n) {
+        if (n < 0) {
+          return '-' + Math.abs(n).toString().padStart(2, '0');
+        }
+        return n.toString().padStart(2, '0');
+      }
+
+      // Ajouter à l'historique (heure finale en vert)
+      function ajouterHeureFinale(heureStr) {
+        if (emptyMsg && emptyMsg.parentNode === historiqueContainer) {
+          historiqueContainer.innerHTML = '';
+        }
+        const item = document.createElement('div');
+        item.className = 'historique-item';
+        const timeSpan = document.createElement('span');
+        timeSpan.className = 'historique-time';
+        timeSpan.textContent = heureStr;
+        item.appendChild(timeSpan);
+        historiqueContainer.appendChild(item);
+        historiqueContainer.scrollTop = historiqueContainer.scrollHeight;
+      }
+
+      // Calcul : minutes = minutes départ + |hex - dec|
+      function effectuerCalcul() {
+        // Heure départ
+        let departStr = departInput.value.trim();
+        let hh = 21, mm = 47, ss = 32;
+        const match = departStr.match(/^(\d{1,2})[:\s-]?(\d{1,2})[:\s-]?(\d{1,2})$/);
+        if (match) {
+          hh = parseInt(match[1], 10) || 0;
+          mm = parseInt(match[2], 10) || 0;
+          ss = parseInt(match[3], 10) || 0;
+        } else {
+          const chiffres = departStr.replace(/\D/g, '');
+          if (chiffres.length >= 6) {
+            hh = parseInt(chiffres.substring(0,2), 10);
+            mm = parseInt(chiffres.substring(2,4), 10);
+            ss = parseInt(chiffres.substring(4,6), 10);
+          }
+        }
+
+        // Champ1 hex
+        let valHex = hexToDecimal(champ1.value);
+        if (isNaN(valHex)) valHex = 0;
+
+        // Champ2 decimal
+        let val2 = decimalFromInput(champ2.value);
+        if (isNaN(val2)) val2 = 0;
+
+        // Champ3 secondes
+        let val3 = decimalFromInput(champ3.value);
+        if (isNaN(val3)) val3 = 0;
+
+        // Différence absolue
+        let diff = Math.abs(valHex - val2);
+
+        // Minutes finales (brutes)
+        let minutesFinales = mm + diff;
+        let secondesFinales = val3;
+        let heuresFinales = hh;
+
+        // Mise à jour affichage
+        finalH.textContent = fmt2(heuresFinales);
+        finalM.textContent = fmt2(minutesFinales);
+        finalS.textContent = fmt2(secondesFinales);
+
+        let heureFinaleStr = `${fmt2(heuresFinales)}:${fmt2(minutesFinales)}:${fmt2(secondesFinales)}`;
+        ajouterHeureFinale(heureFinaleStr);
+      }
+
+      // Événements
+      calculBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        effectuerCalcul();
+      });
+
+      [departInput, champ1, champ2, champ3].forEach(inp => {
+        inp.addEventListener('keypress', (e) => {
+          if (e.key === 'Enter') {
+            e.preventDefault();
+            effectuerCalcul();
+          }
+        });
+      });
+
+      // Affichage initial
+      function initialDisplay() {
+        let departStr = departInput.value.trim();
+        let hh = 21, mm = 47, ss = 32;
+        const match = departStr.match(/^(\d{1,2})[:\s-]?(\d{1,2})[:\s-]?(\d{1,2})$/);
+        if (match) {
+          hh = parseInt(match[1], 10) || 0;
+          mm = parseInt(match[2], 10) || 0;
+          ss = parseInt(match[3], 10) || 0;
+        }
+        let v1 = hexToDecimal(champ1.value) || 0;
+        let v2 = decimalFromInput(champ2.value) || 0;
+        let v3 = decimalFromInput(champ3.value) || 0;
+        let diff = Math.abs(v1 - v2);
+        finalH.textContent = fmt2(hh);
+        finalM.textContent = fmt2(mm + diff);
+        finalS.textContent = fmt2(v3);
+      }
+      window.addEventListener('load', initialDisplay);
+    })();
+  </script>
 </body>
 </html>
